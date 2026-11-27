@@ -1,5 +1,9 @@
 #!/bin/bash
 set -euo pipefail
+if [[ "$#" -gt 1 || ( "$#" -eq 1 && "$1" != --no-launch ) ]]; then
+    printf 'Usage: %s [--no-launch]\n' "$0" >&2
+    exit 2
+fi
 cd "$(dirname "$0")"
 app="$PWD/HDMI Volume.app"
 driver="$PWD/HDMIVolume.driver"
@@ -53,4 +57,4 @@ app_installed=1
 /usr/bin/sudo /usr/sbin/chown -R root:wheel "$app_path"
 done_installing=1
 echo '已安裝。稍後請從選單列的喇叭圖示選「開始控制 Sony HDMI 音量」。'
-/usr/bin/open -a "$app_path"
+if [[ "$#" == 0 ]]; then /usr/bin/open -a "$app_path"; fi
